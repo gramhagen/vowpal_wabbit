@@ -22,8 +22,13 @@ ifeq ($(PYTHON_LIBS),)
   PYTHON_LIBS = -l boost_python
 endif
 
-PYTHON_INCLUDE = $(shell python$(PYTHON_VERSION)-config --includes)
-PYTHON_LDFLAGS = $(shell python$(PYTHON_VERSION)-config --ldflags)
+ifeq ($(PYTHON_INCLUDE),)
+  PYTHON_INCLUDE = $(shell python$(PYTHON_VERSION)-config --includes)
+endif
+
+ifeq ($(PYTHON_LDFLAGS),)
+  PYTHON_LDFLAGS = $(shell python$(PYTHON_VERSION)-config --ldflags)
+endif
 
 JSON_INCLUDE = -I ../rapidjson/include
 

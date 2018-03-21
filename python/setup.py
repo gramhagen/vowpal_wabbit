@@ -4,6 +4,7 @@
 import platform
 import subprocess
 import sys
+import sysconfig
 from codecs import open
 from ctypes.util import find_library
 from distutils.command.clean import clean as _clean
@@ -17,6 +18,7 @@ from shutil import copy, copytree, rmtree
 
 
 system = platform.system()
+py_version = sysconfig.get_python_version()
 here = path.abspath(path.dirname(__file__))
 pylibvw = Extension('pylibvw', sources=['python/pylibvw.cc'])
 
@@ -24,21 +26,14 @@ pylibvw = Extension('pylibvw', sources=['python/pylibvw.cc'])
 def find_boost():
     """Find correct boost-python library information """
     if system == 'Linux':
-        # use version suffix if present
-        boost_lib = 'boost_python-py{v[0]}{v[1]}'.format(v=sys.version_info)
-        if sys.version_info.major == 3:
-            if find_library('boost_python-py36'):
-                boost_lib = 'boost_python-py36'
-            elif find_library('boost_python-py35'):
-                boost_lib = 'boost_python-py35'
-            elif find_library('boost_python-py34'):
-                boost_lib = 'boost_python-py34'
+        # use python version suffix if present
+        boost_lib = 'boost_python-py{}'.format(py_version.replace('.', ''))
         if not find_library(boost_lib):
-            boost_lib = "boost_python"
+            boost_lib = 'boost_python'
     elif system == 'Darwin':
-        boost_lib = 'boost_python-mt' if sys.version_info[0] == 2 else 'boost_python3-mt'
+        boost_lib = 'boost_python-mt' if py_version[0] == '2' else 'boost_python3-mt'
     elif system == 'Cygwin':
-        boost_lib = 'boost_python-mt' if sys.version_info[0] == 2 else 'boost_python3-mt'
+        boost_lib = 'boost_python-mt' if py_version[0] == '2' else 'boost_python3-mt'
     else:
         raise Exception('Building on this system is not currently supported')
 
@@ -107,18 +102,20 @@ class VWBuildExt(_build_ext):
         if not path.isdir(target_dir):
             makedirs(target_dir)
         if system == 'Windows':
-            if sys.version_info[0] == 2 and sys.version_info[1] == 7:
-               copy(path.join(here, 'bin', 'pyvw27.dll'), self.get_ext_fullpath(ext.name))
-            elif sys.version_info[0] == 3 and sys.version_info[1] == 5:
-               copy(path.join(here, 'bin', 'pyvw35.dll'), self.get_ext_fullpath(ext.name))
-            elif sys.version_info[0] == 3 and sys.version_info[1] == 6:
-               copy(path.join(here, 'bin', 'pyvw36.dll'), self.get_ext_fullpath(ext.name))
-            else:
-               raise Exception('Pre-built vw/python library for Windows is not supported for this python version')
+            if py_version not in ['2.7', '3.5', '3.6']:
+                raise Exception('Pre-built vw/python library for Windows is not supported for this python version')
+            py_dll = 'pyvw{}.dll'.format(py_version.replace('.', ''))
+            copy(path.join(here, 'bin', py_dll), self.get_ext_fullpath(ext.name))
         else:
             env = environ
-            env['PYTHON_VERSION'] = '{v[0]}.{v[1]}'.format(v=sys.version_info)
+            env['PYTHON_VERSION'] = py_version
             env['PYTHON_LIBS'] = '-l {}'.format(find_boost())
+            env['PYTHON_INCLUDE'] = '-I {}'.format(sysconfig.get_config_vars('CONFINCLUDEPY')[0])
+            env['PYTHON_LDFLAGS'] = '-undefined dynamic_lookup {}'.format(sysconfig.get_config_vars('CONFIGURE_LDFLAGS')[0] or '')
+
+            env['BOOST_INCLUDE'] = '-I {}'.format(sysconfig.get_config_vars('INCLUDEDIR'))
+            env['BOOST_LIBRARY'] = '-L {}'.format(sysconfig.get_config_vars('LIBDIR')[0])
+
             subprocess.check_call(['make', 'python'], cwd=path.join(here, 'src'), env=env)
             ext_suffix = 'so' if not system == 'Cygwin' else 'dll'
             copy(path.join(here, 'src', 'python', '{name}.{suffix}'.format(name=ext.name, suffix=ext_suffix)),
@@ -190,9 +187,8 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     keywords='fast machine learning online classification regression',
     packages=find_packages(exclude=['examples', 'src', 'tests']),

@@ -18,8 +18,19 @@ endif
 
 UNAME := $(shell uname)
 LIBS = -l boost_program_options -l pthread -l z
-BOOST_INCLUDE = -I /usr/include
-BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib
+
+ifeq ($(BOOST_INCLUDE),)
+  BOOST_INCLUDE = -I /usr/include
+else
+  BOOST_INCLUDE_PRESET = 1
+endif
+
+ifeq ($(BOOST_LIBRARY),)
+  BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib
+else
+  BOOST_LIBRARY_PRESET = 1
+endif
+
 NPROCS := 1
 
 ifeq ($(UNAME), Linux)
@@ -43,12 +54,20 @@ ifeq ($(UNAME), Darwin)
   #	but /opt/local seems to be preferred by some users
   #	so we try them both
   ifneq (,$(wildcard /usr/local/include))
-    BOOST_INCLUDE = -I /usr/local/include
-    BOOST_LIBRARY = -L /usr/local/lib
+    ifeq ($(BOOST_INCLUDE_PRESET),)
+      BOOST_INCLUDE = -I /usr/local/include
+    endif
+    ifeq ($(BOOST_LIBRARY_PREST),)
+      BOOST_LIBRARY = -L /usr/local/lib
+    endif
   endif
   ifneq (,$(wildcard /opt/local/include))
-    BOOST_INCLUDE = -I /opt/local/include
-    BOOST_LIBRARY = -L /opt/local/lib
+    ifeq ($(BOOST_INCLUDE_PRESET),)
+      BOOST_INCLUDE = -I /opt/local/include
+    endif
+    ifeq ($(BOOST_LIBRARY_PREST),)
+      BOOST_LIBRARY = -L /opt/local/lib
+    endif
   endif
   NPROCS:=$(shell sysctl -n hw.ncpu)
 endif
