@@ -20,7 +20,7 @@ UNAME := $(shell uname)
 LIBS = -l boost_program_options -l pthread -l z
 
 ifeq ($(BOOST_INCLUDE),)
-  BOOST_INCLUDE = -I /usr/include
+  BOOST_INCLUDE = -I /usr/local/include/boost -I /usr/include
 else
   BOOST_INCLUDE_PRESET = 1
 endif
@@ -75,7 +75,7 @@ endif
 JSON_INCLUDE = -I ../rapidjson/include
 
 #LIBS = -l boost_program_options-gcc34 -l pthread -l z
-OPTIM_FLAGS ?= -DNDEBUG -O3 -fomit-frame-pointer -fno-strict-aliasing #-ffast-math #uncomment for speed, comment for testability
+OPTIM_FLAGS ?= -DNDEBUG -O3 -fomit-frame-pointer -fno-strict-aliasing -msse2 -mfpmath=sse #-ffast-math #uncomment for speed, comment for testability
 ifeq ($(UNAME), FreeBSD)
   WARN_FLAGS = -Wall
 else
@@ -96,7 +96,6 @@ FLAGS = -std=c++0x $(CFLAGS) $(LDFLAGS) $(ARCH) $(WARN_FLAGS) $(OPTIM_FLAGS) -D_
 #FLAGS = -std=c++0x $(CFLAGS) $(LDFLAGS) -Wall $(ARCH) -ffast-math -D_FILE_OFFSET_BITS=64 $(BOOST_INCLUDE) $(JSON_INCLUDE)  -g -fomit-frame-pointer -ffast-math -fno-strict-aliasing  -fPIC
 
 FLAGS += -I ../rapidjson/include
-
 BINARIES = vw active_interactor
 MANPAGES = vw.1
 
@@ -143,6 +142,7 @@ java: vw
 
 test: .FORCE vw library_example
 	@echo "vw running test-suite..."
+	(cd test && ./RunTests -d -fe -E 0.001 -O --onethread ../vowpalwabbit/vw)
 	(cd test && ./RunTests -d -fe -E 0.001 ../vowpalwabbit/vw)
 
 test_gcov: .FORCE vw_gcov library_example_gcov

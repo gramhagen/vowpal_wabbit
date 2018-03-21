@@ -26,10 +26,11 @@ pylibvw = Extension('pylibvw', sources=['python/pylibvw.cc'])
 def find_boost():
     """Find correct boost-python library information """
     if system == 'Linux':
-        # use python version suffix if present
-        boost_lib = 'boost_python-py{}'.format(py_version.replace('.', ''))
-        if not find_library(boost_lib):
-            boost_lib = 'boost_python'
+        candidates = ['-py{}'.format(py_version.replace('.', '')), '-py{}'.format(py_version[0]), py_version[0], '']
+        for candidate in candidates:
+            boost_lib = 'boost-python{}'.format(candidate)
+            if find_library(boost_lib):
+                break
     elif system == 'Darwin':
         boost_lib = 'boost_python-mt' if py_version[0] == '2' else 'boost_python3-mt'
     elif system == 'Cygwin':

@@ -1310,7 +1310,7 @@ printf '3 |f a b c |e x y z\n2 |f a y c |e x\n' | \
     train-sets/ref/active_cover.stderr
 
 # Test 102: active cover (predict)
-{VW} -i models/active_cover.model --binary -t -d test-sets/rcv1_small_test.data -p active_cover.predict
+{VW} -i models/active_cover.model -t -d test-sets/rcv1_small_test.data -p active_cover.predict
     test-sets/ref/active_cover.stderr
     pred-sets/ref/active_cover.predict
 
@@ -1587,11 +1587,11 @@ echo "1 | feature:1" | {VW} -a --initial_weight 0.1 --initial_t 0.3
     train-sets/ref/classweight.stderr
 
 # Test 162: --classweight with multiclass
-{VW} --oaa 10 -d train-sets/multiclass --classweight 4:0,7:0.1,2:10,10:3
+{VW} --oaa 10 -d train-sets/multiclass --classweight 4:0,7:0.1,2:10 --classweight 10:3
     train-sets/ref/classweight_multiclass.stderr
 
 # Test 163: --classweight with multiclass
-{VW} --recall_tree 10 -d train-sets/multiclass --classweight 4:0,7:0.1,2:10,10:3
+{VW} --recall_tree 10 -d train-sets/multiclass --classweight 4:0,7:0.1 --classweight 2:10,10:3
     train-sets/ref/classweight_recall_tree.stderr
 
 # Test 164: cs_active low mellowness
@@ -1601,3 +1601,11 @@ echo "1 | feature:1" | {VW} -a --initial_weight 0.1 --initial_t 0.3
 # Test 165: cs_active high mellowness
 {VW} --cs_active 3 -d ../test/train-sets/cs_test --cost_max 2 --mellowness 1.0 --simulation --adax
     train-sets/ref/cs_active_1.0.stderr
+
+# Test 166: hash_seed train
+{VW} --hash_seed 5 -d train-sets/rcv1_mini.dat --holdout_off --passes 2 -f hash_seed5.model -c -k --ngram 2 -q ::
+    train-sets/ref/hash_seed_train.stderr
+
+# Test 167: hash_seed test
+{VW} -d train-sets/rcv1_mini.dat -i hash_seed5.model -t
+    train-sets/ref/hash_seed_test.stderr

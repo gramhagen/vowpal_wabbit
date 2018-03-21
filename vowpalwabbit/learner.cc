@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "vw.h"
 #include "parse_regressor.h"
+#include "parse_dispatch_loop.h"
 using namespace std;
 
 void dispatch_example(vw& all, example& ec)
@@ -38,6 +39,7 @@ void process_example(vw& all, example* ec)
     dispatch_example(all, *ec);
   else if (ec->end_pass)
   {
+    all.current_pass++;
     all.l->end_pass();
     VW::finish_example(all, ec);
   }
@@ -51,7 +53,7 @@ void process_example(vw& all, example* ec)
       final_regressor_name = string(ec->tag.begin()+5, (ec->tag).size()-5);
 
     if (!all.quiet)
-      all.trace_message << "saving regressor to " << final_regressor_name << endl;
+      all.opts_n_args.trace_message << "saving regressor to " << final_regressor_name << endl;
     save_predictor(all, final_regressor_name, 0);
 
     VW::finish_example(all,ec);
@@ -94,4 +96,17 @@ void generic_driver(vector<vw*> alls)
 
 void generic_driver(vw& all)
 { generic_driver<vw&, process_example>(all, all); }
+
+  void dispatch(vw& all, v_array<example*> examples)
+  {
+    all.p->end_parsed_examples+=examples.size();//divergence: lock & signal
+    for (size_t i = 0; i < examples.size(); ++i)
+      process_example(all, examples[i]);
+  }
+
+void generic_driver_onethread(vw& all)
+{
+  parse_dispatch<dispatch>(all);
+  all.l->end_examples();
+}
 }
