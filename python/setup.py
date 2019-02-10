@@ -48,6 +48,7 @@ class BuildPyLibVWBindingsModule(_build_ext):
         # Set cmake args
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}'.format(lib_output_dir),
+            '-DCMAKE_MODULE_PATH={};${{CMAKE_MODULE_PATH}}'.format(BASE_DIR),
             '-DCMAKE_BUILD_TYPE={}'.format(config),
             '-DPY_VERSION=' + '{v[0]}.{v[1]}'.format(v=sys.version_info),
             '-DBUILD_PYTHON=ON',
