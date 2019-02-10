@@ -55,7 +55,6 @@ class BuildPyLibVWBindingsModule(_build_ext):
             '-DWARNINGS=OFF',
             '-DPYTHON_INCLUDE_DIR={}'.format(get_config_var('INCLUDEPY')),
             '-DPYTHON_LIBRARY={}'.format(python_lib),
-            '-DBoost_NO_SYSTEM_PATHS=ON',
             '-DBOOST_LIBRARYDIR={}'.format(get_config_var('LIBDIR')),
             '-DBOOST_INCLUDEDIR={}'.format(get_config_var('INCLUDEDIR')),
         ]
