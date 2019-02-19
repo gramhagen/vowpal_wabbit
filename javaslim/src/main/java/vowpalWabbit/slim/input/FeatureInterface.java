@@ -1,4 +1,4 @@
-package bz.turtle.readable.input;
+package vowpalWabbit.slim.input;
 
 public interface FeatureInterface {
   boolean hasIntegerName();

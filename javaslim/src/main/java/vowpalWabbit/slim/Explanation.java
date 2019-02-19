@@ -1,4 +1,4 @@
-package bz.turtle.readable;
+package vowpalWabbit.slim;
 
 import java.util.ArrayList;
 import java.util.List;

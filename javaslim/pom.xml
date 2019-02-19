@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>Turtle - Vowpal Wabbit model read/predict</name>
-
+    <name>VowpalWabbit - Vowpal Wabbit model read/predict</name>
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>9</version>
     </parent>
-
-    <groupId>bz.turtle</groupId>
-    <artifactId>readable</artifactId>
-    <version>2.0.3-BETA</version>
-
+    <groupId>vowpalWabbit</groupId>
+    <artifactId>slim</artifactId>
+    <version>1.0.0-BETA</version>
     <description>
-        A pure Java reader/predictor of Vowpal Wabbit readable model
+        A pure Java reader/predictor of Vowpal Wabbit
     </description>
-    <url>https://turtle.bz/</url>
+    <url>https://github.com/VowpalWabbit/vowpal_wabbit</url>
     <licenses>
         <license>
             <name>MIT</name>
             <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
-
     <developers>
         <developer>
             <name>Borislav Nikolov</name>
@@ -37,15 +31,16 @@
         <developer>
             <name>T Sheasha</name>
         </developer>
+        <developer>
+            <name>Markus Cozowicz</name>
+            <email>marcozo@microsoft.com</email>
+        </developer>
     </developers>
-
     <scm>
-        <connection>scm:git:git@github.com:jackdoe/turtle.git</connection>
-        <developerConnection>scm:git:git@github.com:jackdoe/turtle.git</developerConnection>
-        <url>git@github.com:jackdoe/turtle.git</url>
+        <connection>scm:git:git@github.com:VowpalWabbit/vowpal_wabbit.git</connection>
+        <developerConnection>scm:git:git@github.com:VowpalWabbit/vowpal_wabbit.git</developerConnection>
+        <url>git@github.com:VowpalWabbit/vowpal_wabbit.git</url>
     </scm>
-
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -54,7 +49,6 @@
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
         <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
     </properties>
-
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -65,7 +59,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
@@ -74,8 +67,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -105,9 +102,9 @@
                 </executions>
                 <configuration>
                     <overview>${project.basedir}/src/main/java/bz/turtle/readable/overview.html</overview>
-                    <doctitle>Turtle Java ${project.version} API Reference</doctitle>
-                    <windowtitle>Turtle Java ${project.version}</windowtitle>
-                    <header>Turtle Java ${project.version} API Reference</header>
+                    <doctitle>VowpalWabbit Java ${project.version} API Reference</doctitle>
+                    <windowtitle>VowpalWabbit Java ${project.version}</windowtitle>
+                    <header>VowpalWabbit Java ${project.version} API Reference</header>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

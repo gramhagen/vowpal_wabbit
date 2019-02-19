@@ -25,7 +25,7 @@ add the dependency in pom.xml
     <version>2.0.3-BETA</version>
 </dependency>
 
-import bz.turtle.readable.*;
+import vowpalWabbit.slim.*;
 
 ReadableModel m = new ReadableModel("directory/of/readable_model.txt"); // .txt.gz also works
 

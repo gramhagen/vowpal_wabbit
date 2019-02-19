@@ -1,13 +1,14 @@
 <HTML>
+
 <BODY>
 
 
-Pure java reader for <a href="https://github.com/JohnLangford/vowpal_wabbit/">Vowpal Wabbit</a>
-<code>--readable_model</code> file and creates a weights array
-containing the weight per bucket then using same hashing of vw finds the correct bucket for the input features and
-computes the inner product.
-check out this gist and Feature-Hashing-and-Extraction for more information
-<pre>
+    Pure java reader for <a href="https://github.com/JohnLangford/vowpal_wabbit/">Vowpal Wabbit</a>
+    <code>--readable_model</code> file and creates a weights array
+    containing the weight per bucket then using same hashing of vw finds the correct bucket for the input features and
+    computes the inner product.
+    check out this gist and Feature-Hashing-and-Extraction for more information
+    <pre>
 Example:
 
     Create a vw model:
@@ -16,7 +17,7 @@ Example:
 
     Main.java:
 
-    import bz.turtle.readable.*;
+    import vowpalWabbit.slim.*;
     public class Main {
         public static void main(String[] args) throws Exception {
             ReadableModel m = new ReadableModel(new File("/tmp/readable_model.txt"));
@@ -27,6 +28,7 @@ Example:
 
 </pre>
 
-@see bz.turtle.readable.ReadableModel
+    @see bz.turtle.readable.ReadableModel
 </BODY>
+
 </HTML>

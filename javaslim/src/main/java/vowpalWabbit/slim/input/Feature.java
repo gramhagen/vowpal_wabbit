@@ -1,8 +1,8 @@
-package bz.turtle.readable.input;
+package vowpalWabbit.slim.input;
 
 /**
- * We compute the hash value only once do not reuse between namespaces because the hash is dependent
- * on the namespace hash
+ * We compute the hash value only once do not reuse between namespaces because
+ * the hash is dependent on the namespace hash
  */
 public class Feature implements FeatureInterface {
   private int nameInt;
@@ -21,7 +21,8 @@ public class Feature implements FeatureInterface {
     return hasIntegerName;
   }
 
-  public Feature() {}
+  public Feature() {
+  }
 
   public Feature(String name) {
     this(name, 1);
@@ -52,12 +53,14 @@ public class Feature implements FeatureInterface {
   }
 
   private static boolean isPositiveInteger(String s, int radix) {
-    if (s.isEmpty()) return false;
+    if (s.isEmpty())
+      return false;
     for (int i = 0; i < s.length(); i++) {
       if (i == 0 && s.charAt(i) == '-') {
         return false;
       }
-      if (Character.digit(s.charAt(i), radix) < 0) return false;
+      if (Character.digit(s.charAt(i), radix) < 0)
+        return false;
     }
     return true;
   }
@@ -98,8 +101,8 @@ public class Feature implements FeatureInterface {
   }
 
   /**
-   * --hash strings vs --hash all, in case the feature value is integer, there is no need to convert
-   * it to string
+   * --hash strings vs --hash all, in case the feature value is integer, there is
+   * no need to convert it to string
    */
   public int getIntegerName() {
     return nameInt;
@@ -119,7 +122,10 @@ public class Feature implements FeatureInterface {
     this.value = value;
   }
 
-  /** @return the string name, recomputed from nameInt if needed @see getIntegerName */
+  /**
+   * @return the string name, recomputed from nameInt if needed @see
+   *         getIntegerName
+   */
   public String getStringName() {
     if (!isStringNameComputed) {
       this.name = "" + this.nameInt;

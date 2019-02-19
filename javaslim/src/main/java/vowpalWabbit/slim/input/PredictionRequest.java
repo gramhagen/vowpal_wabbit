@@ -1,4 +1,4 @@
-package bz.turtle.readable.input;
+package vowpalWabbit.slim.input;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,17 +9,14 @@ import java.util.List;
  * Document to predict on Example
  *
  * <pre>
- *      model.predict(
- *                 new PredictionRequest(
- *                     new Namespace(
- *                         "a",
- *                         new Feature("x"),
- *                         new Feature("y",0.5),
- *                         new Feature("z",0.3))));
+ * model.predict(
+ *     new PredictionRequest(new Namespace("a", new Feature("x"), new Feature("y", 0.5), new Feature("z", 0.3))));
  *
  * </pre>
  */
 public class PredictionRequest implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   public List<Namespace> namespaces;
 
   /** request output to be with normalized probabilities */

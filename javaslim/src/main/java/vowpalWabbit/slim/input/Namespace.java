@@ -1,4 +1,4 @@
-package bz.turtle.readable.input;
+package vowpalWabbit.slim.input;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,13 +6,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * vowpal wabbit namespace check out https://github.com/JohnLangford/vowpal_wabbit/wiki/Input-format
- * for more info
+ * vowpal wabbit namespace check out
+ * https://github.com/JohnLangford/vowpal_wabbit/wiki/Input-format for more info
  *
- * <p>We compute the hash value only once do not reuse between models because the hash is dependent
- * on the model seed
+ * <p>
+ * We compute the hash value only once do not reuse between models because the
+ * hash is dependent on the model seed
  */
 public class Namespace implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   public String namespace;
   public List<FeatureInterface> features;
 
@@ -39,7 +42,8 @@ public class Namespace implements Serializable {
   }
 
   /**
-   * change the namespace name, which also resets the computed hash, and all feature's computed hash
+   * change the namespace name, which also resets the computed hash, and all
+   * feature's computed hash
    *
    * @param name - the new namespace name
    */

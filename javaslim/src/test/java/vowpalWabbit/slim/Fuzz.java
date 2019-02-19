@@ -1,4 +1,4 @@
-package bz.turtle.readable;
+package vowpalWabbit.slim;
 
 import org.junit.Test;
 
@@ -38,12 +38,9 @@ public class Fuzz {
   }
 
   public void runVW(TestSet ts, String optionsTrain, String optionsTest) throws Exception {
-    runOrExit(
-        String.format(
-            "vw -d %s --min_prediction -10000 --max_prediction 10000 --readable_model %s -f %s %s",
-            ts.data, ts.model, ts.modelBin, optionsTrain));
-    runOrExit(
-        String.format("vw -d %s -t -i %s -r %s %s", ts.data, ts.modelBin, ts.pred, optionsTest));
+    runOrExit(String.format("vw -d %s --min_prediction -10000 --max_prediction 10000 --readable_model %s -f %s %s",
+        ts.data, ts.model, ts.modelBin, optionsTrain));
+    runOrExit(String.format("vw -d %s -t -i %s -r %s %s", ts.data, ts.modelBin, ts.pred, optionsTest));
     ReadableModel m = new ReadableModel(ts.model);
     m.makeSureItWorks(ts.data, ts.pred, false);
   }
@@ -182,10 +179,7 @@ public class Fuzz {
     public void cleanup(File path) throws IOException {
       Path pathToBeDeleted = Paths.get(path.toURI());
 
-      Files.walk(pathToBeDeleted)
-          .sorted(Comparator.reverseOrder())
-          .map(Path::toFile)
-          .forEach(File::delete);
+      Files.walk(pathToBeDeleted).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
     }
 
     public void tearDown() throws Exception {

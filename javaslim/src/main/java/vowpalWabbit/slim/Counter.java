@@ -1,4 +1,4 @@
-package bz.turtle.readable;
+package vowpalWabbit.slim;
 
 public class Counter {
   public float sum = 0;
@@ -16,7 +16,8 @@ public class Counter {
 
   /** @return sum/count */
   public float get() {
-    if (count == 0) return 0;
+    if (count == 0)
+      return 0;
     return sum / count;
   }
 

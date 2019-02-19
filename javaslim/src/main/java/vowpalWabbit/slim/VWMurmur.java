@@ -1,8 +1,9 @@
-package bz.turtle.readable;
+package vowpalWabbit.slim;
 
 /**
- * copy paste reimplementation from explore/hash.h in JohnLangford/vowpal_wabbit since i couldnt
- * find published murmur for java that returns the same hash as VW so i had to copy it
+ * copy paste reimplementation from explore/hash.h in JohnLangford/vowpal_wabbit
+ * since i couldnt find published murmur for java that returns the same hash as
+ * VW so i had to copy it
  */
 public class VWMurmur {
   private static int rotl32(int x, int r) {
@@ -24,13 +25,17 @@ public class VWMurmur {
   }
 
   public static int hash(byte[] data, int len, int seed) {
+    return hash(data, 0, len, seed);
+  }
+
+  public static int hash(byte[] data, int offset, int len, int seed) {
     int nblocks = len / 4;
     int h1 = seed;
     int c1 = 0xcc9e2d51;
     int c2 = 0x1b873593;
 
-    int i = 0;
-    while (i <= len - 4) {
+    int i = offset;
+    while (i <= offset + len - 4) {
       int k1 = (data[i] | data[i + 1] << 8 | data[i + 2] << 16 | data[i + 3] << 24);
 
       k1 *= c1;
@@ -45,20 +50,20 @@ public class VWMurmur {
     }
 
     int k1 = 0;
-    int end = (nblocks * 4);
+    int end = offset + (nblocks * 4);
     switch (len & 3) {
-      case 3:
-        k1 ^= (int) data[end + 2] << 16;
-      case 2:
-        k1 ^= (int) data[end + 1] << 8;
-      case 1:
-        k1 ^= (int) data[end];
+    case 3:
+      k1 ^= (int) data[end + 2] << 16;
+    case 2:
+      k1 ^= (int) data[end + 1] << 8;
+    case 1:
+      k1 ^= (int) data[end];
 
-        k1 *= c1;
-        k1 = rotl32(k1, 15);
+      k1 *= c1;
+      k1 = rotl32(k1, 15);
 
-        k1 *= c2;
-        h1 ^= k1;
+      k1 *= c2;
+      h1 ^= k1;
     }
     h1 ^= len;
     return fmix(h1);
