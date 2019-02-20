@@ -1,4 +1,4 @@
-include README.rst *.txt *.bat
+include README.rst *.txt
 recursive-include src *
 recursive-include vowpalwabbit *
 recursive-include bin *.dll

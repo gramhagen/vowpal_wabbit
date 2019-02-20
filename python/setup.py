@@ -67,6 +67,9 @@ class BuildPyLibVWBindingsModule(_build_ext):
             "pylibvw"
         ]
 
+        # Set python include dir on cplus include path for boost
+        os.environ['CPLUS_INCLUDE_PATH'] = get_config_var('INCLUDEPY')
+
         # Build pylibvw target
         cmake_directory = os.path.join(BASE_DIR, '..')
         self.spawn(['cmake', str(cmake_directory)] + cmake_args)
