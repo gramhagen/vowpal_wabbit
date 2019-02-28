@@ -4,7 +4,7 @@ configure_file(config.h.in config.h)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(allreduce allreduce_sockets.cc allreduce_threads.cc vw_exception.cc)
-target_include_directories(allreduce PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} \usr\local\include)
+target_include_directories(allreduce PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # Winsock32 should be available on Windows
 if(WIN32)
   target_link_libraries(allreduce PUBLIC wsock32 ws2_32)
