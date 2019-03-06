@@ -7,12 +7,12 @@ The following instructions assume you are working from the python directory.
 Deployment Process
 ------------------
 
-0) Commit changes (increment the version in configure.ac file, PyPI will not overwrite a package using the same version)
+0) Ensure version.txt has a newer version than was previously published to PyPI (PyPI will not overwrite a package using the same version)
 1) Update MANIFEST.in to include any additional files then check it to make sure the dist has the right data in it
 
     .. code-block:: bash
 
-        $ check-manifest --ignore Makefile,PACKAGE.rst,*.cc,tox.ini,tests*,examples*,src*
+        $ check-manifest --ignore Makefile,PACKAGE.rst,*.cc,tests*,examples*,src*
 
 2) Lint the code:
 
@@ -24,8 +24,7 @@ Deployment Process
 
     .. code-block:: bash
 
-        # install virtualenv if necessary
-        $ pip install virtualenv
+        # preferable to use conda env or virtualenv
         $ python setup.py test
 
 
