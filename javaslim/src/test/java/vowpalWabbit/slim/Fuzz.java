@@ -9,11 +9,13 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Random;
 
+import static vowpalWabbit.slim.ModelTest.testModel;
+
 public class Fuzz {
 
-  public static final String alphabet = "abcdefghijklmnopqrstuvwxyz";
+  private static final String alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-  public void runOrExit(String cmd) throws Exception {
+  private void runOrExit(String cmd) throws Exception {
     Process p = Runtime.getRuntime().exec(cmd);
 
     BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -21,7 +23,7 @@ public class Fuzz {
     BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
     System.out.println(cmd);
-    String s = null;
+    String s;
     while ((s = stdInput.readLine()) != null) {
       System.out.println(s);
     }
@@ -37,12 +39,12 @@ public class Fuzz {
     }
   }
 
-  public void runVW(TestSet ts, String optionsTrain, String optionsTest) throws Exception {
+  private void runVW(TestSet ts, String optionsTrain, String optionsTest) throws Exception {
     runOrExit(String.format("vw -d %s --min_prediction -10000 --max_prediction 10000 --readable_model %s -f %s %s",
         ts.data, ts.model, ts.modelBin, optionsTrain));
     runOrExit(String.format("vw -d %s -t -i %s -r %s %s", ts.data, ts.modelBin, ts.pred, optionsTest));
-    ReadableModel m = new ReadableModel(ts.model);
-    m.makeSureItWorks(ts.data, ts.pred, false);
+    VWModel m = ReadableModel.Parse(new FileInputStream(ts.model));
+    testModel(m, ts.data, ts.pred, false);
   }
 
   @Test
@@ -123,7 +125,7 @@ public class Fuzz {
     File tempDir, data, pred, model, modelBin;
     Random r = new Random();
 
-    public String createExample(int klass) {
+    private String createExample(int klass) {
       StringBuilder sb = new StringBuilder();
       sb.append(klass);
       sb.append(" ");
@@ -152,7 +154,7 @@ public class Fuzz {
       return sb.toString();
     }
 
-    public TestSet(int nClassess, int nExamples) throws Exception {
+    private TestSet(int nClassess, int nExamples) throws Exception {
       this.tempDir = Files.createTempDirectory("foobar").toFile();
       this.data = Paths.get(this.tempDir.toString(), "test.txt").toFile();
       this.pred = Paths.get(this.tempDir.toString(), "predictions.txt").toFile();
@@ -176,7 +178,7 @@ public class Fuzz {
       fw.close();
     }
 
-    public void cleanup(File path) throws IOException {
+    private void cleanup(File path) throws IOException {
       Path pathToBeDeleted = Paths.get(path.toURI());
 
       Files.walk(pathToBeDeleted).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
@@ -187,7 +189,7 @@ public class Fuzz {
     }
   }
 
-  public boolean vwfound() {
+  private boolean vwfound() {
     return new File("/usr/local/bin/vw").exists() || new File("/usr/bin/vw").exists();
   }
 }
