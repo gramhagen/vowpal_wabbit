@@ -50,7 +50,9 @@ vowpalwabbit/vw
 cluster/spanning_tree
 *.d
 *.prev
+nprocs.txt
 library/ezexample_predict
+library/ezexample_predict_threaded
 library/ezexample_train
 library/library_example
 library/recommend
@@ -88,6 +90,8 @@ demo/ocr/run.*
 # IntelliJ
 *.idea
 *.iml
+# Ignore java pom
+pom.xml
 # Ignore NuGet Packages
 *.nupkg
 # Ignore the packages folder

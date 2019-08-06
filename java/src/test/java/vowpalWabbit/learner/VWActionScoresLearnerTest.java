@@ -4,16 +4,43 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import vowpalWabbit.VWTestHelper;
+import vowpalWabbit.responses.ActionScore;
 import vowpalWabbit.responses.ActionScores;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jmorra on 10/2/15.
  */
 public class VWActionScoresLearnerTest extends VWTestHelper {
+    private void compareActionScores(ActionScores[] expected, ActionScores[] pred) {
+        Comparator actionScoreComparator = new Comparator<ActionScore>() {
+            @Override
+            public int compare(ActionScore a, ActionScore b) {
+                return a.getAction() - b.getAction();
+            }
+        };
+
+        for (int i=0; i<expected.length; i++) {
+            ActionScore[] pred_i = pred[i].getActionScores();
+            Arrays.sort(pred_i, actionScoreComparator);
+
+            ActionScore[] expected_i = expected[i].getActionScores();
+            Arrays.sort(expected_i, actionScoreComparator);
+
+            for (int j=0; j<expected_i.length; j++) {
+                assertEquals(pred_i[j].getAction(), expected_i[j].getAction());
+                assertEquals(pred_i[j].getScore(), expected_i[j].getScore(), 0.0001f);
+            }
+        }
+    }
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
@@ -38,7 +65,7 @@ public class VWActionScoresLearnerTest extends VWTestHelper {
         VWActionScoresLearner vw = VWLearners.create("--csoaa_ldf mc --quiet --csoaa_rank");
 
         ActionScores[] pred = new ActionScores[data.length];
-        for (int j=0; j< 100; ++j) {
+        for (int j=0; j<100; ++j) {
             for (int i=0; i<data.length; ++i) {
                 pred[i] = vw.learn(data[i]);
             }
@@ -61,7 +88,8 @@ public class VWActionScoresLearnerTest extends VWTestHelper {
                         actionScore(1, 1.0227613f)
                 )
         };
-        assertArrayEquals(expected, pred);
+
+        compareActionScores(expected, pred);
     }
 
     @Test
@@ -110,7 +138,7 @@ public class VWActionScoresLearnerTest extends VWTestHelper {
             )
         };
         vw.close();
-        assertArrayEquals(expectedTrainPreds, trainPreds);
+        compareActionScores(expectedTrainPreds, trainPreds);
 
         vw = VWLearners.create("--quiet -t -i " + model);
         ActionScores[] testPreds = new ActionScores[]{vw.predict(cbADFTrain[0])};
@@ -123,6 +151,6 @@ public class VWActionScoresLearnerTest extends VWTestHelper {
         };
 
         vw.close();
-        assertArrayEquals(expectedTestPreds, testPreds);
+        compareActionScores(expectedTrainPreds, trainPreds);
     }
 }
