@@ -5,7 +5,7 @@ set(JAVA_JVM_LIBRARY NotNeeded)
 find_package(JNI REQUIRED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(src_base src/main/c++)
+set(src_base native/src/main/c++)
 set(vw_jni_headers
   ${src_base}/jni_base_learner.h
   ${src_base}/vowpalWabbit_learner_VWActionProbsLearner.h
