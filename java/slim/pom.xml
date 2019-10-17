@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>VowpalWabbit - Vowpal Wabbit model read/predict</name>
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-    <groupId>vowpalWabbit</groupId>
-    <artifactId>slim</artifactId>
-    <version>1.0.0-BETA</version>
+
+    <groupId>com.github.vowpalwabbit</groupId>
+    <artifactId>vw-jni</artifactId>
+    <version>@PACKAGE_VERSION@.3</version>
+    <packaging>pom</packaging>
+    <name>Vowpal Wabbit Slim Java Layer</name>
+
     <description>
         A pure Java reader/predictor of Vowpal Wabbit
     </description>
     <url>https://github.com/VowpalWabbit/vowpal_wabbit</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/VowpalWabbit/vowpal_wabbit.git</connection>
+        <developerConnection>scm:git:git@github.com/VowpalWabbit/vowpal_wabbit.git</developerConnection>
+        <url>https://github.com/VowpalWabbit/vowpal_wabbit/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <licenses>
         <license>
-            <name>MIT</name>
-            <url>https://opensource.org/licenses/MIT</url>
+            <name>Vowpal Wabbit License</name>
+            <url>https://github.com/VowpalWabbit/vowpal_wabbit/blob/master/LICENSE</url>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <name>Borislav Nikolov</name>
@@ -35,12 +52,12 @@
             <name>Markus Cozowicz</name>
             <email>marcozo@microsoft.com</email>
         </developer>
+        <developer>
+            <name>Scott Graham</name>
+            <email>scgraham@microsoft.com</email>
+        </developer>
     </developers>
-    <scm>
-        <connection>scm:git:git@github.com:VowpalWabbit/vowpal_wabbit.git</connection>
-        <developerConnection>scm:git:git@github.com:VowpalWabbit/vowpal_wabbit.git</developerConnection>
-        <url>git@github.com:VowpalWabbit/vowpal_wabbit.git</url>
-    </scm>
+  
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -49,16 +66,7 @@
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
         <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
     </properties>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+ 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>

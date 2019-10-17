@@ -10,5 +10,6 @@
     <modules>
       <module>spark</module>
       <module>full</module>
+      <module>slim</module>
     </modules>
 </project>
